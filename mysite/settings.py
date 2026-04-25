@@ -9,9 +9,9 @@ SECRET_KEY = 'django-insecure-assignement-secret-key'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '.onrender.com',
+    "django-blog-unnati.onrender.com",
+    "127.0.0.1",
+    "localhost",
 ]
 
 
