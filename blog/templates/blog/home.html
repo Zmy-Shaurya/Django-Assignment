@@ -1,79 +1,102 @@
 {% extends 'blog/base.html' %}
 
-{% block title %}Home - Unnati's Blog{% endblock %}
+{% block title %}Home - Shaurya's Blog{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="display-6">Priya's Blog ✨</h1>
-        <p class="text-muted">Sharing thoughts, learning, and experiences 🚀</p>
+<!-- Hero Section -->
+<section class="hero-section mb-5 rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 40px; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+        <div>
+            <h1 class="display-5 fw-bold mb-2">Welcome to Shaurya's Blog</h1>
+            <p class="fs-5 opacity-90">Discover inspiring stories, share your journey, and grow with a community</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'create_post' %}" class="btn btn-light btn-lg fw-semibold px-4">
+                <i class="fas fa-plus me-2"></i>Write Now
+            </a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn btn-light btn-lg fw-semibold px-4">
+                <i class="fas fa-arrow-right me-2"></i>Get Started
+            </a>
+        {% endif %}
     </div>
-    {% if user.is_authenticated %}
-        <a href="{% url 'create_post' %}" class="btn btn-primary btn-lg">Create New Post</a>
-    {% endif %}
+</section>
+
+<!-- Posts Grid -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-4">
+        <i class="fas fa-star me-2 text-accent"></i>Latest Posts
+    </h2>
 </div>
 
 <div class="row g-4">
     {% for post in posts %}
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm border-0">
-
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" 
-                         class="card-img-top" 
-                         alt="{{ post.title }}"
-                         style="height:200px; object-fit:cover;">
-                {% else %}
-                    <img src="https://source.unsplash.com/600x320/?motivation"
-                         class="card-img-top"
-                         style="height:200px; object-fit:cover;"
-                         alt="Placeholder image">
-                {% endif %}
+            <div class="card card-modern h-100 border-0 shadow-sm">
+                <div class="card-img-wrapper position-relative overflow-hidden">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" 
+                             class="card-img-top" 
+                             alt="{{ post.title }}">
+                    {% else %}
+                        <div class="placeholder-image d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 48px;">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                    {% endif %}
+                    <!-- Category Badge -->
+                    <span class="badge position-absolute top-0 end-0 m-3
+                        {% if post.category == 'Motivation' %}badge-accent
+                        {% elif post.category == 'Discipline' %}badge-warning
+                        {% else %}badge-success
+                        {% endif %}">
+                        <i class="fas fa-tag me-1"></i>{{ post.category }}
+                    </span>
+                </div>
 
                 <div class="card-body d-flex flex-column">
+                    <!-- Author + Date -->
+                    <p class="card-meta text-muted small mb-2">
+                        <i class="fas fa-user me-1"></i><strong>{{ post.author.username }}</strong>
+                        <i class="fas fa-calendar ms-2 me-1"></i>{{ post.created_at|date:'M d, Y' }}
+                    </p>
 
                     <!-- Title -->
-                    <h5 class="card-title text-primary">
+                    <h5 class="card-title fw-bold mb-3">
                         {{ post.title }}
                     </h5>
 
-                    <!-- 🔥 Category Badge -->
-                    <span class="badge mb-2
-                        {% if post.category == 'Motivation' %}bg-danger
-                        {% elif post.category == 'Discipline' %}bg-warning text-dark
-                        {% else %}bg-success
-                        {% endif %}">
-                        {{ post.category }}
-                    </span>
-
-                    <!-- Author + Date -->
-                    <p class="card-text text-muted small mb-2">
-                        By <strong>{{ post.author.username }}</strong> ✍️ · 
-                        {{ post.created_at|date:'M d, Y' }}
+                    <!-- Content Preview -->
+                    <p class="card-text text-muted flex-grow-1 mb-3">
+                        {{ post.content|truncatechars:100 }}
                     </p>
 
-                    <!-- Content -->
-                    <p class="card-text text-muted">
-                        {{ post.content|truncatechars:120 }}
-                    </p>
-
-                    <!-- Button -->
-                    <div class="mt-auto">
-                        <a href="{% url 'post_detail' post.pk %}" 
-                           class="btn btn-outline-primary">
-                           Read More →
-                        </a>
-                    </div>
-
+                    <!-- Read More Button -->
+                    <a href="{% url 'post_detail' post.pk %}" 
+                       class="btn btn-sm btn-outline-accent stretched-link-button">
+                       <i class="fas fa-arrow-right me-1"></i>Read More
+                    </a>
                 </div>
             </div>
         </div>
 
     {% empty %}
         <div class="col-12">
-            <div class="alert alert-info text-center">
-                No posts yet. Be the first to share your thoughts 🚀
+            <div class="empty-state text-center py-5 rounded-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                <div style="font-size: 64px; margin-bottom: 20px;">
+                    <i class="fas fa-feather opacity-50"></i>
+                </div>
+                <h4 class="fw-bold mb-2">No posts yet</h4>
+                <p class="text-muted mb-4">Be the first to share your incredible story</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create_post' %}" class="btn btn-accent">
+                        <i class="fas fa-pen-fancy me-2"></i>Write Your First Post
+                    </a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-accent">
+                        <i class="fas fa-user-plus me-2"></i>Join Now
+                    </a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

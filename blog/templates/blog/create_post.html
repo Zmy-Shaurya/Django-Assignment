@@ -1,35 +1,82 @@
 {% extends 'blog/base.html' %}
-{% block title %}Create Post - Django Blog{% endblock %}
+{% block title %}Write New Post - VlogHub{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title mb-3">Create New Post</h2>
+    <div class="col-lg-7">
+        <div class="card form-card shadow-sm border-0">
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <h2 class="card-title fw-bold mb-2">
+                        <i class="fas fa-pen-fancy text-accent me-2"></i>Write New Post
+                    </h2>
+                    <p class="text-muted">Share your thoughts and inspire others</p>
+                </div>
+
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        {{ form.title.label_tag }}
+                    
+                    <!-- Title Field -->
+                    <div class="mb-4">
+                        <label for="id_title" class="form-label fw-semibold">
+                            <i class="fas fa-heading me-2 text-accent"></i>Post Title
+                        </label>
                         {{ form.title }}
                         {% if form.title.errors %}
-                            <div class="text-danger small">{{ form.title.errors }}</div>
+                            <div class="text-danger small mt-2">
+                                <i class="fas fa-exclamation-circle me-1"></i>{{ form.title.errors }}
+                            </div>
                         {% endif %}
                     </div>
-                    <div class="mb-3">
-                        {{ form.content.label_tag }}
+
+                    <!-- Category Field -->
+                    <div class="mb-4">
+                        <label for="id_category" class="form-label fw-semibold">
+                            <i class="fas fa-tag me-2 text-accent"></i>Category
+                        </label>
+                        <select name="category" id="id_category" class="form-select form-control-modern">
+                            <option value="Learning">Learning</option>
+                            <option value="Motivation">Motivation</option>
+                            <option value="Discipline">Discipline</option>
+                        </select>
+                    </div>
+
+                    <!-- Content Field -->
+                    <div class="mb-4">
+                        <label for="id_content" class="form-label fw-semibold">
+                            <i class="fas fa-align-left me-2 text-accent"></i>Content
+                        </label>
                         {{ form.content }}
                         {% if form.content.errors %}
-                            <div class="text-danger small">{{ form.content.errors }}</div>
+                            <div class="text-danger small mt-2">
+                                <i class="fas fa-exclamation-circle me-1"></i>{{ form.content.errors }}
+                            </div>
                         {% endif %}
                     </div>
-                    <div class="mb-3">
-                        {{ form.image.label_tag }}
-                        {{ form.image }}
+
+                    <!-- Image Field -->
+                    <div class="mb-4">
+                        <label for="id_image" class="form-label fw-semibold">
+                            <i class="fas fa-image me-2 text-accent"></i>Featured Image (Optional)
+                        </label>
+                        <div class="image-upload-wrapper">
+                            {{ form.image }}
+                        </div>
                         {% if form.image.errors %}
-                            <div class="text-danger small">{{ form.image.errors }}</div>
+                            <div class="text-danger small mt-2">
+                                <i class="fas fa-exclamation-circle me-1"></i>{{ form.image.errors }}
+                            </div>
                         {% endif %}
                     </div>
-                    <button type="submit" class="btn btn-primary">Publish Post</button>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 mt-5 pt-3 border-top">
+                        <button type="submit" class="btn btn-accent btn-lg flex-grow-1 fw-semibold">
+                            <i class="fas fa-paper-plane me-2"></i>Publish Post
+                        </button>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
